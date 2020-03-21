@@ -10,7 +10,8 @@ Helper that keep track of OIs
 
 ## to use 
 1. Download the file
-2. Rename into **CMD** with no extension
-3. make executable
-4. move to PATH
-5. enjoy running **CMD**
+2. install dependencies `pip3 install -r req`
+3. Rename into **CMD** with no extension
+4. make executable `chmod +x CMD`
+5. move to PATH
+6. enjoy running **CMD**
