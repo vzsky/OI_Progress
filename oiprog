@@ -45,8 +45,8 @@ def Crawl () :
 
         return res
     except Exception as e :
-        print(e)
-        # error()
+        # print(e)
+        error()
         return 
 
 if len(sys.argv) > 1 :
