@@ -24,7 +24,7 @@ def Crawl () :
     try :
         res = {}
 
-        db = TinyDB('./db.json')
+        db = TinyDB('./oiprog_helper/db.json')
         Config = Query()
 
         toi = db.search(Config.thailandoi.exists())[0]['thailandoi']

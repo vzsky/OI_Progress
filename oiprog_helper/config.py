@@ -77,7 +77,7 @@ def codeforces (db) :
     return 
 
 def init () :
-    db = TinyDB('./db.json')
+    db = TinyDB('./oiprog_helper/db.json')
     Config = Query()
     if len(db.search(where('valid') == 1)) == 1 :
         return
@@ -94,7 +94,7 @@ def init () :
 
 def set_config () :
 
-    db = TinyDB('./db.json')
+    db = TinyDB('./oiprog_helper/db.json')
     Config = Query()
     
     title = "what's up! what do you want?"

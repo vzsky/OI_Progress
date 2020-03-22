@@ -8,7 +8,7 @@ from collections import Counter, OrderedDict
 
 def get () :
     try :
-        db = TinyDB('./db.json')
+        db = TinyDB('./oiprog_helper/db.json')
         Config = Query()
         cf = db.search(Config.codeforces.exists())[0]['codeforces']
 
@@ -51,7 +51,7 @@ def display (res) :
     if res == None :
         return
         
-    db = TinyDB('./db.json')
+    db = TinyDB('./oiprog_helper/db.json')
     Config = Query()
     cf = db.search(Config.codeforces.exists())[0]['codeforces']
     name = db.search(Config.name.exists())[0]['name']

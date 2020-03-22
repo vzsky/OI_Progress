@@ -6,7 +6,7 @@ import decorating as dc
 
 def get () :
     try :
-        db = TinyDB('./db.json')
+        db = TinyDB('./oiprog_helper/db.json')
         Config = Query()
         toi = db.search(Config.thailandoi.exists())[0]['thailandoi']
 
@@ -40,7 +40,7 @@ def display (res) :
     if res == None :
         return
 
-    db = TinyDB('./db.json')
+    db = TinyDB('./oiprog_helper/db.json')
     Config = Query()
     toi = db.search(Config.thailandoi.exists())[0]['thailandoi']
     name = db.search(Config.name.exists())[0]['name']
