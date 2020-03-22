@@ -6,7 +6,7 @@ import decorating as dc
 
 def get () :
     try :
-        db = TinyDB('./oiprog_helper/db.json')
+        db = TinyDB('/usr/local/bin/oiprog_helper/oiprog.json')
         Config = Query()
         oic = db.search(Config.oichecklist.exists())[0]['oichecklist']
 
@@ -27,7 +27,7 @@ def display (res) :
     if res == None :
         return
         
-    db = TinyDB('./oiprog_helper/db.json')
+    db = TinyDB('/usr/local/bin/oiprog_helper/oiprog.json')
     Config = Query()
     oic = db.search(Config.oichecklist.exists())[0]['oichecklist']
     name = db.search(Config.name.exists())[0]['name']
