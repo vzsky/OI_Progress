@@ -1,12 +1,16 @@
 import requests
 from bs4 import BeautifulSoup
-from .config import config
+from tinydb import TinyDB, Query, where
 from .style import txt, number
 import decorating as dc
 
 def get () :
     try :
-        crawl  = requests.get(config['oichecklist']['url']).content
+        db = TinyDB('./db.json')
+        Config = Query()
+        oic = db.search(Config.oichecklist.exists())[0]['oichecklist']
+
+        crawl  = requests.get(oic['url']).content
         soup = BeautifulSoup(crawl, features="html.parser")
         soup.prettify()
 
@@ -22,8 +26,14 @@ def get () :
 def display (res) :
     if res == None :
         return
-    if (config['oichecklist']['display']) :
-        print(txt("From oichecklist of "+config['name']))
+        
+    db = TinyDB('./db.json')
+    Config = Query()
+    oic = db.search(Config.oichecklist.exists())[0]['oichecklist']
+    name = db.search(Config.name.exists())[0]['name']
+    
+    if (oic['display']) :
+        print(txt("From oichecklist of "+name))
         print(txt("Did solve ") +number(res[0])+ txt(" OI problems"))
         print(txt("Solved ") +number(str(res[1])+" %")+ txt(" of all tasks"))
         print()

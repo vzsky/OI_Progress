@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from .config import config
+from tinydb import TinyDB, Query, where
 from .style import txt, number, chart
 import decorating as dc
 import json
@@ -8,7 +8,11 @@ from collections import Counter, OrderedDict
 
 def get () :
     try :
-        crawl  = requests.get(config['codeforces']['urlstatus']).content
+        db = TinyDB('./db.json')
+        Config = Query()
+        cf = db.search(Config.codeforces.exists())[0]['codeforces']
+
+        crawl  = requests.get(cf['urlstatus']).content
         soup = BeautifulSoup(crawl, features='html.parser')
         soup.prettify()
 
@@ -30,7 +34,7 @@ def get () :
         solved = [dict(s) for s in set(tuple(x.items()) for x in solved)]
         solved_rate = [task['rating'] for task in solved]
 
-        crawl  = requests.get(config['codeforces']['urlrating']).content
+        crawl  = requests.get(cf['urlrating']).content
         soup = BeautifulSoup(crawl, features='html.parser')
         soup.prettify()
 
@@ -46,11 +50,17 @@ def get () :
 def display (res) :
     if res == None :
         return
-    if config['codeforces']['display'] :
-        print(txt("From codeforces of " + config['name']))
+        
+    db = TinyDB('./db.json')
+    Config = Query()
+    cf = db.search(Config.codeforces.exists())[0]['codeforces']
+    name = db.search(Config.name.exists())[0]['name']
+
+    if cf['display'] :
+        print(txt("From codeforces of " + name))
         print(txt("have solved ")+ number(res[0])+ txt(" problems in total"))
 
-        if config['codeforces']['displaychart'] :
+        if cf['displaychart'] :
             print(txt("this is solved problems rating distr."))
             solved_ratings = Counter(res[1])
             tochart = [ (s, solved_ratings[s]) for s in solved_ratings if s != None] 

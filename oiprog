@@ -4,8 +4,10 @@ from bs4 import BeautifulSoup
 import decorating as dc
 from decorating.color import colorize
 from oiprog_helper import thailandoi, oichecklist, codeforces
-from oiprog_helper.config import config
-from oiprog_helper.style import txt, number, error
+from oiprog_helper.config import set_config, init
+from oiprog_helper.style import txt, number, error, help
+import sys
+from tinydb import TinyDB, Query, where
 
 @dc.writing(delay=0.005)
 def printer(res) :
@@ -22,25 +24,40 @@ def Crawl () :
     try :
         res = {}
 
-        if (config['thailandoi']['display']) :
+        db = TinyDB('./db.json')
+        Config = Query()
+
+        toi = db.search(Config.thailandoi.exists())[0]['thailandoi']
+        oic = db.search(Config.oichecklist.exists())[0]['oichecklist']
+        cf = db.search(Config.codeforces.exists())[0]['codeforces']
+
+        if (toi['display']) :
             with dc.animated("Crawling back to you~") :
                 res['thailandoi'] = thailandoi.get()
 
-        if (config['oichecklist']['display']) :
+        if (oic['display']) :
             with dc.animated("We bout to go up, baby up we go~") :
                 res['oichecklist'] = oichecklist.get()
 
-        if (config['codeforces']['display']) :
+        if (cf['display']) :
             with dc.animated("Let it be~") :
                 res['codeforces'] = codeforces.get()
 
         return res
     except Exception as e :
-        error()
+        print(e)
+        # error()
         return 
 
-config['thailandoi']['url'] = 'https://evaluator.thailandoi.org/login/login?utf8=%E2%9C%93&authenticity_token='+config['thailandoi']['authen_token']+'&login='+config['thailandoi']['user']+'&password='+config['thailandoi']['pwd']+'&commit=Login'
-config['codeforces']['urlstatus'] = 'https://codeforces.com/api/user.status?handle='+config['codeforces']['handle']
-config['codeforces']['urlrating'] = 'https://codeforces.com/api/user.rating?handle='+config['codeforces']['handle']
+if len(sys.argv) > 1 :
+    if len(sys.argv) == 2 and sys.argv[1] == 'config' :
+        set_config()
+    elif len(sys.argv) == 2 and sys.argv[1] == 'init' :
+        init()
+    elif len(sys.argv) == 2 and sys.argv[1] == 'help' :
+        help()
+    else :
+        print("Command not found : `oiprog help` to learn more")
+else :
 
-printer(Crawl())
+    printer(Crawl())

@@ -20,3 +20,11 @@ def chart (tochart) :
     data = vcolor(tochart, pattern)
     for line in chart.graph(label=None, data=data):
         print(line)
+
+def help () :
+    print("This is OIPROG")
+    print("A cli application to keep oi status in track")
+    print("If you are new, please do " + colorize("oiprog init", 'red'))
+    print("If you want to go to settings, please do " + colorize("oiprog config", 'red'))
+    print("If you have already set the configurations, please do " + colorize("oiprog", 'red'))
+    print("If there're any problems, please contact us at " + colorize('github.com/vzsky/OI_Progress', 'yellow'))

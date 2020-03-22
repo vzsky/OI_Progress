@@ -1,12 +1,16 @@
 import requests
 from bs4 import BeautifulSoup
-from .config import config
+from tinydb import TinyDB, Query, where
 from .style import txt, number
 import decorating as dc
 
 def get () :
     try :
-        crawl  = requests.get(config['thailandoi']['url']).content
+        db = TinyDB('./db.json')
+        Config = Query()
+        toi = db.search(Config.thailandoi.exists())[0]['thailandoi']
+
+        crawl  = requests.get(toi['url']).content
         soup = BeautifulSoup(crawl, features="html.parser")
         soup.prettify()
         tasks = soup.find("div", {"class": "col-md-7"})
@@ -35,8 +39,14 @@ def get () :
 def display (res) :
     if res == None :
         return
-    if (config['thailandoi']['display']) :
-        print(txt("From evaluator.thailandoi.org of " + config['name']))
+
+    db = TinyDB('./db.json')
+    Config = Query()
+    toi = db.search(Config.thailandoi.exists())[0]['thailandoi']
+    name = db.search(Config.name.exists())[0]['name']
+
+    if (toi['display']) :
+        print(txt("From evaluator.thailandoi.org of " + name))
         print(txt("Did solve problems worth ") +number(res[0])+ txt(" points"))
         print(txt("From overall of ") +number(res[1])+ txt(" points"))
         progress = res[0]*100/res[1]
