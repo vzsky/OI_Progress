@@ -13,12 +13,12 @@ from tinydb import TinyDB, Query, where
 def printer(res) :
     if res == None :
         return
-    try :
-        for site in sites :
-            if site['name'] in res :
-                site['lib'].display(res[site['name']])
-    except :
-        print("\nCancelled")
+    # try :
+    for site in sites :
+        if site['name'] in res :
+            site['lib'].display(res[site['name']])
+    # except :
+    #     print("\nCancelled")
 
 def Crawl () :
     try :
