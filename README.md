@@ -9,5 +9,5 @@ Helper that keep track of OIs
 ## to use 
 1. Download the file
 2. install dependencies `pip3 install -r req`
-3. move to `PATH`
-4. enjoy running **CMD**
+3. move **oiprog** to `PATH`
+4. enjoy running **oiprog**, starting with `oiprog help`
