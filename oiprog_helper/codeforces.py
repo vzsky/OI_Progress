@@ -5,10 +5,11 @@ from .style import txt, number, chart
 import decorating as dc
 import json
 from collections import Counter, OrderedDict
+from pick import pick
 
 def get () :
     try :
-        db = TinyDB('/usr/local/bin/oiprog_helper/oiprog.json')
+        db = TinyDB('/usr/local/bin/oiprog.json')
         Config = Query()
         cf = db.search(Config.codeforces.exists())[0]['codeforces']
 
@@ -51,7 +52,7 @@ def display (res) :
     if res == None :
         return
         
-    db = TinyDB('/usr/local/bin/oiprog_helper/oiprog.json')
+    db = TinyDB('/usr/local/bin/oiprog.json')
     Config = Query()
     cf = db.search(Config.codeforces.exists())[0]['codeforces']
     name = db.search(Config.name.exists())[0]['name']
@@ -68,3 +69,40 @@ def display (res) :
 
         print(txt("Rating of this codeforces id is now ") + number(res[2]))
         print()
+
+def gather_user () :
+    handle = input("What's your codeforces handle? ")
+    title = "Do you want to enable codeforces rating distribution of solved tasks? (can change)"
+    options = ['Yes', 'No']
+    option, index2 = pick(options, title,  indicator='>')
+    dis = None
+    if (index2 == 0) :
+        dis = True
+    else :
+        dis = False
+    cf = { 'handle' : handle, 'display' : True, 'displaychart' : dis, 
+        'urlstatus' : 'https://codeforces.com/api/user.status?handle='+handle,
+        'urlrating' : 'https://codeforces.com/api/user.rating?handle='+handle
+    }
+    return cf
+
+def init (db) :
+    title = "Do you want to enable codeforces? (can change)"
+    options = ['Yes', 'No']
+    option, index = pick(options, title,  indicator='>')
+    cf = {}
+
+    if index == 0 : 
+        cf = gather_user()
+    if index == 1 :
+        cf = { 'handle' : None, 'display' : False, 'displaychart' : None, 'urlstatus' : None, 'urlrating' : None}
+    db.insert({'codeforces' : cf})
+    return 
+
+def showconfig (db) :
+    cf = db.search(Query().codeforces.exists())[0]['codeforces']
+    strmap = {'True' : 'enabled', 'False' : 'disabled'}
+    print("Codeforces : " + strmap[str(cf['display'])])
+    print("handle : " + str(cf['handle']))
+    if cf['displaychart'] :
+        print("You wanted to see rating distribution of solved tasks")

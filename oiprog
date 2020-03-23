@@ -4,8 +4,8 @@ from bs4 import BeautifulSoup
 import decorating as dc
 from decorating.color import colorize
 from oiprog_helper import thailandoi, oichecklist, codeforces
-from oiprog_helper.config import set_config, init
-from oiprog_helper.style import txt, number, error, help
+from oiprog_helper.config import set_config, init, sites
+from oiprog_helper.style import txt, number, error, help, msg
 import sys
 from tinydb import TinyDB, Query, where
 
@@ -13,35 +13,25 @@ from tinydb import TinyDB, Query, where
 def printer(res) :
     if res == None :
         return
-    if ('thailandoi' in res) :
-        thailandoi.display(res['thailandoi'])
-    if ('oichecklist' in res) :
-        oichecklist.display(res['oichecklist'])
-    if ('codeforces' in res) :
-        codeforces.display(res['codeforces'])
+    try :
+        for site in sites :
+            if site['name'] in res :
+                site['lib'].display(res[site['name']])
+    except :
+        print("\nCancelled")
 
 def Crawl () :
     try :
         res = {}
 
-        db = TinyDB('/usr/local/bin/oiprog_helper/oiprog.json')
+        db = TinyDB('/usr/local/bin/oiprog.json')
         Config = Query()
-
-        toi = db.search(Config.thailandoi.exists())[0]['thailandoi']
-        oic = db.search(Config.oichecklist.exists())[0]['oichecklist']
-        cf = db.search(Config.codeforces.exists())[0]['codeforces']
-
-        if (toi['display']) :
-            with dc.animated("Crawling back to you~") :
-                res['thailandoi'] = thailandoi.get()
-
-        if (oic['display']) :
-            with dc.animated("We bout to go up, baby up we go~") :
-                res['oichecklist'] = oichecklist.get()
-
-        if (cf['display']) :
-            with dc.animated("Let it be~") :
-                res['codeforces'] = codeforces.get()
+        
+        for site in sites : 
+            data = db.search(Config[site['name']].exists())[0][site['name']]
+            if (data['display']) :
+                with dc.animated(msg[site['name']]) :
+                    res[site['name']] = site['lib'].get()
 
         return res
     except Exception as e :

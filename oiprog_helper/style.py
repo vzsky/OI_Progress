@@ -4,6 +4,12 @@ from ascii_graph import Pyasciigraph
 from ascii_graph.colors import *
 from ascii_graph.colordata import vcolor, hcolor
 
+msg = {
+    'thailandoi' : "Crawling back to you~",
+    "oichecklist" : "We bout to go up, baby up we go~",
+    "codeforces" : "let it be~"
+}
+
 def txt(str) :
     return colorize(str, 'gray', 'bold')
 

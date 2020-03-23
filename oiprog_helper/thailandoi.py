@@ -3,10 +3,11 @@ from bs4 import BeautifulSoup
 from tinydb import TinyDB, Query, where
 from .style import txt, number
 import decorating as dc
+from pick import pick
 
 def get () :
     try :
-        db = TinyDB('/usr/local/bin/oiprog_helper/oiprog.json')
+        db = TinyDB('/usr/local/bin/oiprog.json')
         Config = Query()
         toi = db.search(Config.thailandoi.exists())[0]['thailandoi']
 
@@ -40,7 +41,7 @@ def display (res) :
     if res == None :
         return
 
-    db = TinyDB('/usr/local/bin/oiprog_helper/oiprog.json')
+    db = TinyDB('/usr/local/bin/oiprog.json')
     Config = Query()
     toi = db.search(Config.thailandoi.exists())[0]['thailandoi']
     name = db.search(Config.name.exists())[0]['name']
@@ -52,3 +53,40 @@ def display (res) :
         progress = res[0]*100/res[1]
         print(txt("Solved ") + number("%.2f %%" % progress) + txt(" of all tasks"))
         print()
+
+TOI_TOKEN = token = "ypRMh70pJkGNfWyAgTEWKk4iNgw9J63UlDv1i44WRPPUqtXKhFWgce51zDkddPIpkPA7LizyxKeVUHyZ1JrVuw%3D%3D"
+
+def gather_user () :
+    token = TOI_TOKEN
+    user = input("What is your username? ")
+    pwd = input("What is your password? (We don't hash) ")
+    toi = {'user' : user, 'pwd' : pwd, 'display' : True,
+        'authen_token' : token,
+        'url' : 'https://evaluator.thailandoi.org/login/login?utf8=%E2%9C%93&authenticity_token='+token+'&login='+user+'&password='+pwd+'&commit=Login'
+    }
+    return toi
+
+def init (db) :
+    token = TOI_TOKEN
+
+    title = "Do you want to enable evaluator thailandoi? (can change)"
+    options = ['Yes', 'No']
+    option, index = pick(options, title,  indicator='>')
+    toi = {}
+    if (index == 0) :
+        toi = gather_user()
+    if (index == 1) :
+        toi = {'user' : None, 'pwd' : None, 'display' : False,
+            'authen_token' : token,
+            'url' : None
+        }
+    db.insert({'thailandoi' : toi})
+    return
+
+def showconfig (db) :
+    toi = db.search(Query().thailandoi.exists())[0]['thailandoi']
+    strmap = {'True' : 'enabled', 'False' : 'disabled'}
+    print("Evaluator Thailandoi : " + strmap[str(toi['display'])])
+    print("user : " + str(toi['user']))
+    print("pwd : " + str(toi['pwd']))
+    print()
