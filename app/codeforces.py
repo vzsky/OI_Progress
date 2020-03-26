@@ -1,15 +1,17 @@
 import requests
 from bs4 import BeautifulSoup
 from tinydb import TinyDB, Query, where
-from .style import txt, number, chart
+from style import txt, number, chart
 import decorating as dc
 import json
 from collections import Counter, OrderedDict
 from pick import pick
+import os, pathlib
+__dir = pathlib.Path(__file__).parent.parent.absolute()
 
 def get () :
     try :
-        db = TinyDB('/usr/local/bin/oiprog.json')
+        db = TinyDB(os.path.join(__dir,'oiprog.json'))
         Config = Query()
         cf = db.search(Config.codeforces.exists())[0]['codeforces']
 
@@ -52,7 +54,7 @@ def display (res) :
     if res == None :
         return
         
-    db = TinyDB('/usr/local/bin/oiprog.json')
+    db = TinyDB(os.path.join(__dir,'oiprog.json'))
     Config = Query()
     cf = db.search(Config.codeforces.exists())[0]['codeforces']
     name = db.search(Config.name.exists())[0]['name']

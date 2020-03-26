@@ -3,14 +3,7 @@ from decorating.color import colorize
 from ascii_graph import Pyasciigraph
 from ascii_graph.colors import *
 from ascii_graph.colordata import vcolor, hcolor
-
-msg = {
-    'thailandoi' : "Crawling back to you~",
-    "oichecklist" : "We bout to go up, baby up we go~",
-    "codeforces" : "let it be~"
-}
-
-theme = 'my99n'
+from settings import theme
 
 themes = {
     'codeforces' : {
@@ -25,7 +18,7 @@ themes = {
         'number' : ('pink', 'underline'),
         'error' : ('red', 'bold'),
         'symbol' : '|',
-        'chart' : [ICya, IGre, IYel, IRed, IBlu, IPur]
+        'chart' : [ICya, IGre, IYel, IRed, Blu, IPur]
     },
     'autoratch' : {
         'text' : ('gray', 'bold'),
@@ -42,9 +35,11 @@ def txt(str) :
 def number (str) :
     return colorize(str, themes[theme]['number'][0], themes[theme]['number'][1])
 
-@dc.writing(delay=0.02)
-def error () :
-    print(colorize("There's an error in the process, please config and try again", themes[theme]['error'][0], themes[theme]['error'][1]))
+def error (error, debug=False) :
+    if (debug) :
+        print("ERROR: ",error)
+    else :
+        print(colorize("There's an error in the process, please config and try again", themes[theme]['error'][0], themes[theme]['error'][1]))
 
 def chart (tochart) :
     chart = Pyasciigraph(graphsymbol=themes[theme]['symbol'])

@@ -1,6 +1,8 @@
 from pick import pick
 from tinydb import TinyDB, Query, where
-from . import thailandoi, oichecklist, codeforces
+import thailandoi, oichecklist, codeforces
+import os, pathlib
+__dir = pathlib.Path(__file__).parent.parent.absolute()
 
 sites = [
     {       
@@ -21,7 +23,7 @@ siteoption = [site['name'] for site in sites]
 siteoption.append('done')
 
 def init () :
-    db = TinyDB('/usr/local/bin/oiprog.json')
+    db = TinyDB(os.path.join(__dir,'oiprog.json'))
     Config = Query()
     if len(db.search(where('valid') == 1)) == 1 :
         return
@@ -37,7 +39,7 @@ def init () :
 
 def set_config () :
 
-    db = TinyDB('/usr/local/bin/oiprog.json')
+    db = TinyDB(os.path.join(__dir,'oiprog.json'))
     Config = Query()
     
     title = "what's up! what do you want?"

@@ -1,13 +1,15 @@
 import requests
 from bs4 import BeautifulSoup
 from tinydb import TinyDB, Query, where
-from .style import txt, number
+from style import txt, number
 import decorating as dc
 from pick import pick
+import os, pathlib
+__dir = pathlib.Path(__file__).parent.parent.absolute()
 
 def get () :
     try :
-        db = TinyDB('/usr/local/bin/oiprog.json')
+        db = TinyDB(os.path.join(__dir,'oiprog.json'))
         Config = Query()
         toi = db.search(Config.thailandoi.exists())[0]['thailandoi']
 
@@ -41,7 +43,7 @@ def display (res) :
     if res == None :
         return
 
-    db = TinyDB('/usr/local/bin/oiprog.json')
+    db = TinyDB(os.path.join(__dir,'oiprog.json'))
     Config = Query()
     toi = db.search(Config.thailandoi.exists())[0]['thailandoi']
     name = db.search(Config.name.exists())[0]['name']

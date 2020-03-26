@@ -3,11 +3,14 @@
 from bs4 import BeautifulSoup
 import decorating as dc
 from decorating.color import colorize
-from oiprog_helper import thailandoi, oichecklist, codeforces
-from oiprog_helper.config import set_config, init, sites
-from oiprog_helper.style import txt, number, error, help, msg
+import thailandoi, oichecklist, codeforces
+from config import set_config, init, sites
+from style import txt, number, error, help
+from settings import msg
 import sys
 from tinydb import TinyDB, Query, where
+import pathlib, os
+__dir = pathlib.Path(__file__).parent.parent.absolute()
 
 @dc.writing(delay=0.005)
 def printer(res) :
@@ -24,7 +27,7 @@ def Crawl () :
     try :
         res = {}
 
-        db = TinyDB('/usr/local/bin/oiprog.json')
+        db = TinyDB(os.path.join(__dir,'oiprog.json'))
         Config = Query()
         
         for site in sites : 
@@ -35,8 +38,7 @@ def Crawl () :
 
         return res
     except Exception as e :
-        # print(e)
-        error()
+        error(e, debug=False)
         return 
 
 if len(sys.argv) > 1 :
@@ -49,5 +51,4 @@ if len(sys.argv) > 1 :
     else :
         print("Command not found : `oiprog help` to learn more")
 else :
-
     printer(Crawl())
