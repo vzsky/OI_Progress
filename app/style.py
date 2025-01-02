@@ -46,6 +46,7 @@ def chart (tochart) :
     data = vcolor(tochart, themes[theme]['chart'])
     for line in chart.graph(label=None, data=data):
         print(line)
+        # print(line)
 
 def help () :
     print("This is OIPROG")
